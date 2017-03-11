@@ -3,7 +3,7 @@
     "description": "An extended jenssegers/laravel-mongodb library",
     "type": "library",
     "require": {
-        "illuminate/support": "5.1.*",
+        "illuminate/support": "^5.1",
         "jenssegers/mongodb": "^3.0"
     },
     "license": "MIT",
