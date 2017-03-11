@@ -10,6 +10,7 @@ use Kamva\Moloquent\Relations\ContainsOne;
 use Kamva\Moloquent\Relations\HasMany;
 use Kamva\Moloquent\Relations\HasOne;
 use Kamva\Moloquent\Relations\IncludedIn;
+use Kamva\Moloquent\Relations\IncludedInMany;
 
 trait HybridRelations
 {
@@ -207,6 +208,26 @@ trait HybridRelations
         $localKey = $localKey ?: $this->getKeyName();
 
         return new IncludedIn($instance->newQuery(), $this, $otherKey, $localKey);
+    }
+
+    /**
+     * Define a one-to-few relationship.
+     *
+     * @param  string  $related
+     * @param  string  $otherKey
+     * @param  string  $localKey
+     * @return IncludedInMany
+     */
+    public function includedInMany($related, $otherKey = null, $localKey = null)
+    {
+        /** @var Moloquent $instance */
+        $instance = new $related;
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        $otherKey = $otherKey ?: Str::snake(class_basename($this)).'s';
+
+        return new IncludedInMany($instance->newQuery(), $this, $otherKey, $localKey);
     }
 
 }

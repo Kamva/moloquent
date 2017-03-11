@@ -139,6 +139,17 @@ class User extend Moloquent {
 }
 ```
 
+And the document on mongodb users collection would be like this:
+
+```bson
+{
+    "_id" : ObjectId("57bbca61551dfe007c67427e"),
+    "email" : "sample@mail.com",
+    "password" : "[hashed passowrd]",
+    "image_id" : ObjectId("57d2b82e1284c5008032521f")
+}
+```
+
 #### ContainsFew
 
 It is a `One-to-Many` relation that children are few, and children are strong entity
@@ -157,9 +168,24 @@ class User extend Moloquent {
 }
 ```
 
+And an example document would be like this:
+
+```bson
+{
+    "_id" : ObjectId("57bbca61551dfe007c67427e"),
+    "email" : "sample@mail.com",
+    "password" : "[hashed passowrd]",
+    "phone_ids" : [
+        ObjectId("57d2ba501284c500826dfbd5"),
+        ObjectId("57ba1e7d551dfe007a7e8cc1")
+    ]
+}
+```
+
 #### IncludedIn
 
-It is the opposite relation of `ContainsOne` and `ContainsFew`.
+It is the opposite relation of `ContainsOne` and `ContainsFew` when the child (current instance) is included in
+one parent.
 
 ```php
 use Kamva/Moloquent/Moloquent;
@@ -168,6 +194,23 @@ class Phone extend Moloquent {
 
     public function owner() {
         return $this->IncludedIn('User');
+    }
+
+}
+```
+
+#### IncludedInMany
+
+There are situations that the child is included in many instances of a model, for these situation we use
+`IncludedInMany` relation. 
+
+```php
+use Kamva/Moloquent/Moloquent;
+
+class Address extend Moloquent {
+
+    public function order() {
+        return $this->IncludedInMany('Order');
     }
 
 }
