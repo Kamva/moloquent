@@ -25,7 +25,7 @@ trait HybridRelations
     public function hasOne($related, $foreignKey = null, $localKey = null)
     {
         // Check if it is a relation with an original model.
-        if (! is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
+        if (!is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
             return parent::hasOne($related, $foreignKey, $localKey);
         }
 
@@ -41,15 +41,15 @@ trait HybridRelations
     /**
      * Define a one-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $foreignKey
+     * @param  string $localKey
      * @return HasMany
      */
     public function hasMany($related, $foreignKey = null, $localKey = null)
     {
         // Check if it is a relation with an original model.
-        if (! is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
+        if (!is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
             return parent::hasMany($related, $foreignKey, $localKey);
         }
 
@@ -65,10 +65,10 @@ trait HybridRelations
     /**
      * Define an inverse one-to-one or many relationship.
      *
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  string  $relation
+     * @param  string $related
+     * @param  string $foreignKey
+     * @param  string $otherKey
+     * @param  string $relation
      * @return BelongsTo
      */
     public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null)
@@ -83,7 +83,7 @@ trait HybridRelations
         }
 
         // Check if it is a relation with an original model.
-        if (! is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
+        if (!is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
             return parent::belongsTo($related, $foreignKey, $otherKey, $relation);
         }
 
@@ -106,11 +106,11 @@ trait HybridRelations
     /**
      * Define a many-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $collection
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  string  $relation
+     * @param  string $related
+     * @param  string $collection
+     * @param  string $foreignKey
+     * @param  string $otherKey
+     * @param  string $relation
      * @return BelongsToMany
      */
     public function belongsToMany($related, $collection = null, $foreignKey = null, $otherKey = null, $relation = null)
@@ -123,7 +123,7 @@ trait HybridRelations
         }
 
         // Check if it is a relation with an original model.
-        if (! is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
+        if (!is_subclass_of($related, 'Jenssegers\Mongodb\Eloquent\Model')) {
             return parent::belongsToMany($related, $collection, $foreignKey, $otherKey, $relation);
         }
 
@@ -154,9 +154,9 @@ trait HybridRelations
     /**
      * Define a one-to-few relationship.
      *
-     * @param  string  $related
-     * @param  string  $localKey
-     * @param  string  $foreignKey
+     * @param  string $related
+     * @param  string $localKey
+     * @param  string $foreignKey
      * @return ContainsFew
      */
     public function containsFew($related, $localKey = null, $foreignKey = null)
@@ -164,7 +164,7 @@ trait HybridRelations
         /** @var Moloquent $instance */
         $instance = new $related;
 
-        $localKey = $localKey ?: Str::snake(class_basename($instance)).'s';
+        $localKey = $localKey ?: Str::snake(class_basename($instance)) . '_ids';
 
         $foreignKey = $foreignKey ?: $instance->getKeyName();
 
@@ -174,9 +174,9 @@ trait HybridRelations
     /**
      * Define a one-to-few relationship.
      *
-     * @param  string  $related
-     * @param  string  $localKey
-     * @param  string  $foreignKey
+     * @param  string $related
+     * @param  string $localKey
+     * @param  string $foreignKey
      * @return ContainsOne
      */
     public function containsOne($related, $localKey = null, $foreignKey = null)
@@ -184,7 +184,7 @@ trait HybridRelations
         /** @var Moloquent $instance */
         $instance = new $related;
 
-        $localKey = $localKey ?: Str::snake(class_basename($instance));
+        $localKey = $localKey ?: Str::snake(class_basename($instance)) . '_id';
 
         $foreignKey = $foreignKey ?: $instance->getKeyName();
 
@@ -194,19 +194,17 @@ trait HybridRelations
     /**
      * Define a one-to-few relationship.
      *
-     * @param  string  $related
-     * @param  string  $otherKey
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $otherKey
+     * @param  string $localKey
      * @return IncludedIn
      */
-    public function includedIn($related, $otherKey = null, $localKey = null)
+    public function includedIn($related, $otherKey, $localKey = null)
     {
         /** @var Moloquent $instance */
         $instance = new $related;
 
         $localKey = $localKey ?: $this->getKeyName();
-
-        $otherKey = $otherKey ?: Str::snake(class_basename($this)).'s';
 
         return new IncludedIn($instance->newQuery(), $this, $otherKey, $localKey);
     }

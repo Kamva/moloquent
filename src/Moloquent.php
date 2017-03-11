@@ -2,8 +2,8 @@
 namespace Kamva\Moloquent;
 
 use Carbon\Carbon;
-use Jenssegers\Mongodb\Eloquent\HybridRelations;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Kamva\Moloquent\Traits\HybridRelations;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
 

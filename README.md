@@ -173,6 +173,8 @@ class Phone extend Moloquent {
 }
 ```
 
+[فروشگاه ساز][7]
+
 
 [1]: https://github.com/jenssegers/laravel-mongodb
 [2]: https://docs.mongodb.com/manual/reference/database-references/
@@ -180,3 +182,4 @@ class Phone extend Moloquent {
 [4]: http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1
 [5]: http://blog.mongodb.org/post/87892923503/6-rules-of-thumb-for-mongodb-schema-design-part-2
 [6]: http://blog.mongodb.org/post/88473035333/6-rules-of-thumb-for-mongodb-schema-design-part-3
+[7]: http://kamva.ir
