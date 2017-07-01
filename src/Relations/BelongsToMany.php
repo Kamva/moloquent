@@ -77,7 +77,7 @@ class BelongsToMany extends MongoBelongsToMany
         }
 
         // Attach the new ids to the parent model.
-        $this->parent->push($this->otherKey, [$id], true);
+        $this->parent->push($this->getRelatedKey(), [$id], true);
 
         if ($touch) {
             $this->touchIfTouching();
@@ -116,10 +116,10 @@ class BelongsToMany extends MongoBelongsToMany
 
         // Detach all ids from the parent model.
         if (empty($ids)) {
-            $this->parent->{$this->otherKey} = [];
+            $this->parent->{$this->getRelatedKey()} = [];
             $this->parent->save();
         } else {
-            $this->parent->pull($this->otherKey, $ids);
+            $this->parent->pull($this->getRelatedKey(), $ids);
         }
 
         // Prepare the query to select all related objects.
@@ -159,10 +159,11 @@ class BelongsToMany extends MongoBelongsToMany
         // First we need to attach any of the associated models that are not currently
         // in this joining table. We'll spin through the given IDs, checking to see
         // if they exist in the array of current ones, and if not we will insert.
-        $current = $this->parent->{$this->otherKey} ?: [];
+        $current = $this->parent->{$this->getRelatedKey()} ?: [];
 
         // See issue #256.
         if ($current instanceof Collection) {
+            /** @var Collection|array $ids */
             $current = $ids->modelKeys();
         }
 
