@@ -19,7 +19,7 @@ class BelongsTo extends MongoBelongsTo
     {
         $foreign = $this->foreignKey;
 
-        $other = $this->otherKey;
+        $other = $this->ownerKey;
 
         // First we will get to build a dictionary of the child models by their primary
         // key of the relationship, then we can easily match the children back onto
