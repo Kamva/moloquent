@@ -1,4 +1,5 @@
 <?php
+
 namespace Kamva\Moloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -115,6 +116,12 @@ class ContainsFew extends Relation
         return $this->query->get();
     }
 
+    /**
+     * Create a new instance of the related model and Include it in parent model.
+     *
+     * @param array $attributes
+     * @return Model
+     */
     public function create(array $attributes)
     {
         $instance = $this->related->newInstance($attributes);
@@ -126,6 +133,12 @@ class ContainsFew extends Relation
         return $instance;
     }
 
+    /**
+     * Include a model instance into the parent model.
+     *
+     * @param Model $model
+     * @return Model
+     */
     public function save(Model $model)
     {
         $model->save();
@@ -135,10 +148,17 @@ class ContainsFew extends Relation
         return $model;
     }
 
+    /**
+     * Include array of model instances inside the parent model.
+     *
+     * @param array|Model[] $models
+     * @return array|Model[]
+     */
     public function saveMany(array $models)
     {
         $ids = [];
         foreach ($models as $model) {
+            $model->save();
             $ids[] = $model->getKey();
         }
 
@@ -147,6 +167,12 @@ class ContainsFew extends Relation
         return $models;
     }
 
+    /**
+     * Include a model inside parent model.
+     *
+     * @param string|Model|ObjectID $id
+     * @param bool                  $convert
+     */
     public function attach($id, $convert = true)
     {
         $id = $this->convertOne($id, $convert);
@@ -156,6 +182,12 @@ class ContainsFew extends Relation
         $this->parent->touch();
     }
 
+    /**
+     * Exclude models from parent model.
+     *
+     * @param array|Model[]|ObjectID[] $ids
+     * @param bool                     $convert
+     */
     public function detach($ids = [], $convert = true)
     {
         $ids = $this->convertMany($ids, $convert);
@@ -223,12 +255,19 @@ class ContainsFew extends Relation
         return $this->parent->getAttribute($this->localKey);
     }
 
-    protected function attachMany($ids)
+    /**
+     * Include models inside parent model.
+     *
+     * @param array|Model[]|ObjectID[] $ids
+     * @param bool                     $convert
+     * @return array
+     */
+    protected function attachMany($ids, $convert = true)
     {
         $changes = ['attached' => []];
 
         foreach ($ids as $id) {
-            $id = $this->convertOne($id);
+            $id = $this->convertOne($id, $convert);
             if ($this->parent->push($this->localKey, $id, true)) {
                 $changes['attached'][] = (string) $id;
             }
@@ -238,8 +277,8 @@ class ContainsFew extends Relation
     }
 
     /**
-     * @param $id
-     * @param $convert
+     * @param string|Model|ObjectID $id
+     * @param bool                  $convert
      * @return ObjectID
      */
     protected function convertOne($id, $convert = true)
