@@ -1,4 +1,5 @@
 <?php
+
 namespace Kamva\Moloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -110,6 +111,12 @@ class ContainsOne extends Relation
         return $this->query->first();
     }
 
+    /**
+     * Create a new instance of the related model and Include it in parent model.
+     *
+     * @param array $attributes
+     * @return Model
+     */
     public function create(array $attributes)
     {
         $instance = $this->related->newInstance($attributes);
@@ -121,6 +128,12 @@ class ContainsOne extends Relation
         return $instance;
     }
 
+    /**
+     * Include a model instance into the parent model.
+     *
+     * @param Model $model
+     * @return Model
+     */
     public function save(Model $model)
     {
         $model->save();
@@ -128,6 +141,12 @@ class ContainsOne extends Relation
         return $this->attach($model);
     }
 
+    /**
+     * Include a model inside parent model.
+     *
+     * @param string|Model|ObjectID $id
+     * @param bool                  $convert
+     */
     public function attach($id, $convert = true)
     {
         $id = $this->convert($id, $convert);
@@ -136,6 +155,14 @@ class ContainsOne extends Relation
         $this->parent->save();
     }
 
+    /**
+     * Remove relation between parent and related. if any id given,
+     * remove the relation if the given model exists in parent.
+     *
+     * @param string|ObjectID|Model|null $id
+     * @param bool                       $convert
+     * @return bool
+     */
     public function detach($id = null, $convert = true)
     {
         $id = $this->convert($id, $convert);
@@ -143,6 +170,7 @@ class ContainsOne extends Relation
         if ($this->parent->{$this->localKey} == $id || $id === null) {
             $this->parent->{$this->localKey} = null;
             $this->parent->save();
+
             return true;
         } else {
             return false;
