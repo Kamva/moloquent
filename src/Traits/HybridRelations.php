@@ -153,7 +153,7 @@ trait HybridRelations
     }
 
     /**
-     * Define a one-to-few relationship.
+     * Define a one-to-few containing relationship.
      *
      * @param  string $related
      * @param  string $localKey
@@ -173,7 +173,7 @@ trait HybridRelations
     }
 
     /**
-     * Define a one-to-few relationship.
+     * Define a one-to-one containing relationship.
      *
      * @param  string $related
      * @param  string $localKey
@@ -193,7 +193,7 @@ trait HybridRelations
     }
 
     /**
-     * Define a one-to-few relationship.
+     * Define an inverse one-to-one or few relationship that included only in one parent.
      *
      * @param  string $related
      * @param  string $otherKey
@@ -211,21 +211,19 @@ trait HybridRelations
     }
 
     /**
-     * Define a one-to-few relationship.
+     * Define an inverse one-to-one or few relationship that included in many parents.
      *
      * @param  string  $related
      * @param  string  $otherKey
      * @param  string  $localKey
      * @return IncludedInMany
      */
-    public function includedInMany($related, $otherKey = null, $localKey = null)
+    public function includedInMany($related, $otherKey, $localKey = null)
     {
         /** @var Moloquent $instance */
         $instance = new $related;
 
         $localKey = $localKey ?: $this->getKeyName();
-
-        $otherKey = $otherKey ?: Str::snake(class_basename($this)).'s';
 
         return new IncludedInMany($instance->newQuery(), $this, $otherKey, $localKey);
     }
