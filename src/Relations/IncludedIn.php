@@ -1,10 +1,13 @@
 <?php
+
 namespace Kamva\Moloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use MongoDB\BSON\ObjectID;
+use MongoDB\Driver\Exception\BulkWriteException;
 
 class IncludedIn extends Relation
 {
@@ -109,6 +112,12 @@ class IncludedIn extends Relation
         return $this->query->first();
     }
 
+    /**
+     * Include current model inside given model.
+     *
+     * @param string|ObjectID|Model $id
+     * @return bool
+     */
     public function attachTo($id)
     {
         $newParent = ($id instanceof Model) ? $id : $this->related->find($id);
@@ -118,7 +127,6 @@ class IncludedIn extends Relation
         if ($newParent == null || $currentParent == $newParent) {
             return false;
         }
-
 
         if ($currentParent != null) {
             $this->detachFrom($currentParent);
@@ -130,11 +138,12 @@ class IncludedIn extends Relation
         return true;
     }
 
-    public function detachFrom($id)
+    /**
+     * Exclude current model from parent model.
+     */
+    public function detach()
     {
-        $parent = ($id instanceof Model) ? $id : $this->related->find($id);
-
-        $parent->pull($this->otherKey, $this->getLocalKey());
+        $this->pullOff($this->getQuery());
     }
 
     protected function getLocalKey()
@@ -165,6 +174,18 @@ class IncludedIn extends Relation
         }
 
         return $dictionary;
+    }
+
+    /**
+     * @param Builder|Model $query
+     */
+    protected function pullOff($query)
+    {
+        try {
+            $query->pull($this->otherKey, $this->getLocalKey());
+        } catch (BulkWriteException $e) {
+            $query->update([$this->otherKey => null]);
+        }
     }
 
 }
