@@ -109,15 +109,15 @@ class User extend Moloquent {}
 
 Supported relations are:
 
-hasOne
-hasMany
-belongsTo
-belongsToMany
-embedsOne
-embedsMany
-ContainsOne
-ContainsFew
-IncludedIn
+- hasOne
+- hasMany
+- belongsTo
+- belongsToMany
+- embedsOne
+- embedsMany
+- ContainsOne
+- ContainsFew
+- IncludedIn
 
 The first 6 relations are the same as base package, with a little different that IDs store
 as ObjectID instead of value of ObjectID (string)
